@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FedPromptly — Social Invite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep: #1e1f22;
+    --bg-mid: #2b2d31;
+    --bg-surface: #313338;
+    --bg-float: #232428;
+    --text-normal: #dbdee1;
+    --text-header: #f2f3f5;
+    --text-muted: #949ba4;
+    --blurple: #5865f2;
+    --blurple-hover: #4752c4;
+    --green: #57f287;
+    --border: rgba(255,255,255,0.06);
+    --card-radius: 14px;
+    --banner-h: 128px;
+    --icon-size: 88px;
+  }
+
+  html, body { 
+    height: 100%; 
+  }
+
+  /* ───── BULLETPROOF CENTERING ───── */
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(88,101,242,0.08), transparent 65%),
+      var(--bg-deep);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    color: var(--text-normal);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .discord-card {
+    width: min(94vw, 520px);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow:
+      0 24px 60px -12px rgba(0,0,0,0.75),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative;
+  }
+
+  /* ───── PLAYFUL ANIMATED BANNER ───── */
+  .banner {
+    height: var(--banner-h);
+    position: relative;
+    background: linear-gradient(120deg, #FF6B6B, #FFD166, #B388FF, #FF6B6B);
+    background-size: 300% 300%;
+    animation: bgShift 8s ease-in-out infinite;
+    overflow: hidden;
+  }
+
+  /* Skip Button */
+  .skip-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .skip-btn:hover {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .skip-btn svg {
+    width: 10px;
+    height: 10px;
+    fill: currentColor;
+  }
+
+  /* Floating Bubbles */
+  .bubble {
+    position: absolute;
+    bottom: -20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(2px);
+    animation: floatUp linear infinite;
+  }
+
+  .b1 { width: 30px; height: 30px; left: 15%; animation-duration: 4s; animation-delay: 0s; }
+  .b2 { width: 50px; height: 50px; left: 45%; animation-duration: 6s; animation-delay: 1s; }
+  .b3 { width: 20px; height: 20px; left: 75%; animation-duration: 5s; animation-delay: 2s; }
+  .b4 { width: 40px; height: 40px; left: 85%; animation-duration: 7s; animation-delay: 0.5s; }
+  .b5 { width: 25px; height: 25px; left: 30%; animation-duration: 4.5s; animation-delay: 3s; }
+
+  /* Twinkling Sparkles */
+  .sparkle {
+    position: absolute;
+    fill: #FFF;
+    animation: twinkle ease-in-out infinite;
+  }
+
+  .s1 { width: 18px; height: 18px; top: 25%; left: 25%; animation-duration: 2.5s; }
+  .s2 { width: 14px; height: 14px; top: 60%; left: 55%; animation-duration: 3s; animation-delay: 0.8s; }
+  .s3 { width: 22px; height: 22px; top: 20%; left: 80%; animation-duration: 2.8s; animation-delay: 1.5s; }
+
+  @keyframes bgShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    20% { opacity: 0.8; }
+    100% { transform: translateY(-140px) scale(1.2); opacity: 0; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { transform: scale(0.5) rotate(0deg); opacity: 0.3; }
+    50% { transform: scale(1.2) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 6px #FFF); }
+  }
+
+  /* ───── ICON ───── */
+  .icon-wrap {
+    position: absolute;
+    left: 20px;
+    top: calc(var(--banner-h) - 48px);
+    z-index: 5;
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
+
+  .icon-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 209, 102, 0.7) 0%, transparent 65%);
+    filter: blur(8px);
+    z-index: 0;
+    animation: pulseIcon 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulseIcon {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .server-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5px solid var(--bg-surface);
+    background: #ffffff; 
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    position: relative;
+    z-index: 1;
+    overflow: hidden; 
+  }
+
+  .server-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(0.95); 
+  }
+
+  .online-dot {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 4px solid var(--bg-surface);
+    z-index: 6;
+  }
+
+  /* ───── HEADER ───── */
+  .card-header {
+    padding: 52px 20px 18px;
+    background: var(--bg-surface);
+    position: relative;
+  }
+
+  .server-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-header);
+    line-height: 1.15;
+  }
+
+  .stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .stats i {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    display: inline-block;
+    opacity: 0.6;
+  }
+
+  .stats .tag { color: var(--text-normal); font-weight: 600; }
+
+  #discord-online {
+    color: var(--green);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  #discord-online::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(87, 242, 135, 0.6);
+    animation: pulseDot 2s infinite;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ───── BODY ───── */
+  .card-body { padding: 0 20px 20px; }
+
+  .description {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+
+  .description strong { color: var(--text-normal); font-weight: 600; }
+
+  /* ───── FEATURE PILLS ───── */
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--bg-mid);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .pill .emoji { font-size: 13px; line-height: 1; filter: saturate(0.85); }
+
+  /* ───── CONTACT ROW ───── */
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.01em;
+  }
+
+  .contacts .label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 9.5px;
+  }
+
+  .contacts a {
+    color: var(--text-normal);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(219,222,225,0.22);
+    padding-bottom: 1px;
+    transition: color .18s, border-color .18s;
+  }
+
+  .contacts a:hover { color: #fff; border-color: var(--blurple); }
+
+  /* ───── BUTTON GROUP ───── */
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    transition: background .18s ease, transform .18s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.9;
+  }
+
+  /* Secondary Preview Button */
+  .preview-btn {
+    background: #4e5058;
+    color: #fff;
+  }
+
+  .preview-btn:hover {
+    background: #6d6f78;
+    transform: translateY(-1px);
+  }
+
+  /* Primary Join Button */
+  .join-btn {
+    background: var(--blurple);
+    color: #fff;
+  }
+
+  .join-btn:hover {
+    background: var(--blurple-hover);
+    transform: translateY(-1px);
+  }
+
+  /* ───── FOOTER ───── */
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--bg-float);
+    border-top: 1px solid var(--border);
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .card-footer .domain {
+    color: var(--text-normal);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .card-footer .domain:hover { color: #fff; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-muted);
+  }
+
+  .badge svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--green);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ───── RESPONSIVE ───── */
+  @media (max-width: 420px) {
+    :root { --banner-h: 108px; --icon-size: 76px; }
+    .icon-wrap { left: 16px; top: calc(var(--banner-h) - 42px); }
+    .online-dot { width: 18px; height: 18px; border-width: 3.5px; }
+    .card-header { padding: 46px 16px 14px; }
+    .server-name { font-size: 19px; }
+    .card-body { padding: 0 16px 16px; }
+    .card-footer { padding: 10px 16px; }
+    .b1 { left: 10%; }
+    .b4 { left: 90%; }
+    .action-buttons { flex-direction: column; }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .banner, .bubble, .sparkle, .icon-wrap::before, #discord-online::before {
+      animation: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <article class="discord-card" aria-label="FedPromptly social invite">
+
+    <!-- PLAYFUL ANIMATED BANNER -->
+    <div class="banner">
+      
+      <!-- SKIP BUTTON -->
+      <a class="skip-btn" href="https://www.fedpromptly.com/social" target="_blank" rel="noopener">
+        Skip
+        <svg viewBox="0 0 24 24"><path d="M5.5 4.5l10 7.5-10 7.5v-15zM18 5v14h2V5h-2z"/></svg>
+      </a>
+
+      <div class="bubble b1"></div>
+      <div class="bubble b2"></div>
+      <div class="bubble b3"></div>
+      <div class="bubble b4"></div>
+      <div class="bubble b5"></div>
+      
+      <svg class="sparkle s1" viewBox="0 0 24 24"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+      <svg class="sparkle s2" viewBox="0 0 24 24"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+      <svg class="sparkle s3" viewBox="0 0 24 24"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+    </div>
+
+    <div class="icon-wrap">
+      <div class="server-icon">
+        <img src="https://i.ibb.co/67vXcRnx/icon.png" alt="FedPromptly Logo">
+      </div>
+      <div class="online-dot" title="Online"></div>
+    </div>
+
+    <header class="card-header">
+      <h1 class="server-name">FedPromptly</h1>
+      <div class="stats">
+        <span class="tag">Open source</span>
+        <i></i>
+        <span>AI tools</span>
+        <i></i>
+        <span id="discord-online">Loading...</span>
+      </div>
+    </header>
+
+    <main class="card-body">
+
+      <p class="description">
+        Building an open-source ecosystem for <strong>browser-native AI tools</strong> and <strong>cross-platform publishing</strong>.
+      </p>
+
+      <div class="features">
+        <span class="pill"><span class="emoji">🔓</span> Open source</span>
+        <span class="pill"><span class="emoji">🌐</span> Browser-native</span>
+        <span class="pill"><span class="emoji">🤖</span> AI tools</span>
+        <span class="pill"><span class="emoji">📡</span> Cross-platform</span>
+      </div>
+
+      <div class="contacts">
+        <span class="label">Contact</span>
+        <a href="mailto:contact@fedpromptly.com">contact@fedpromptly.com</a>
+        <a href="mailto:careers@fedpromptly.com">careers@fedpromptly.com</a>
+      </div>
+
+      <!-- BUTTON GROUP -->
+      <div class="action-buttons">
+        
+        <!-- Preview Button (Secondary) -->
+        <a class="btn preview-btn" href="https://www.fedpromptly.com/social" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Preview
+        </a>
+
+        <!-- Join Button (Primary) -->
+        <a class="btn join-btn" href="https://discord.com/invite/Jm4XStx4Pf" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Join
+        </a>
+
+      </div>
+
+    </main>
+
+    <footer class="card-footer">
+      <a class="domain" href="https://www.fedpromptly.com" target="_blank" rel="noopener">www.fedpromptly.com</a>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18-6-6 6-6"/><path d="m15 6 6 6-6 6"/></svg>
+        Open source
+      </span>
+    </footer>
+
+  </article>
+
+  <!-- LIVE STATUS SCRIPT -->
+  <script>
+    const WIDGET_URL = 'https://discord.com/api/guilds/1400235929154879490/widget.json';
+
+    async function updateOnlineStatus() {
+      const el = document.getElementById('discord-online');
+
+      try {
+        const response = await fetch(WIDGET_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const data = await response.json();
+        el.textContent = `${data.presence_count} Online`;
+      } catch (error) {
+        console.error('Discord widget error:', error);
+        el.textContent = 'Offline';
+      }
+    }
+
+    updateOnlineStatus();
+  </script>
+
+</body>
+</html>
