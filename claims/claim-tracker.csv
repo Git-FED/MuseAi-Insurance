@@ -1,0 +1,2 @@
+claim_id,status,received_at,affected_layers,selected_option,reviewer,decision,refund_status,notes
+EXAMPLE-000,draft,2026-10-27T00:00:00Z,"1;5",monthly,,,,Template row; replace before use

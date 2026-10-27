@@ -1,0 +1,7 @@
+{
+  "claimant_ref": "EXAMPLE-001",
+  "incident_date": "2026-10-27T12:00:00Z",
+  "layers": [2, 5, 6],
+  "description": "Fictional example: after a workspace update, an agent could not load its project files. The customer has a local backup and a redacted error log for review.",
+  "no_secrets_confirmed": true
+}

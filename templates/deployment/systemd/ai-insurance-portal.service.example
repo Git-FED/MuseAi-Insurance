@@ -1,0 +1,11 @@
+[Unit]
+Description=AI Insurance draft local portal
+[Service]
+WorkingDirectory=/opt/ai-insurance
+ExecStart=/usr/bin/python3 /opt/ai-insurance/portal/app/app.py
+Environment=HOST=127.0.0.1
+Environment=PORT=8765
+NoNewPrivileges=true
+PrivateTmp=true
+[Install]
+WantedBy=multi-user.target

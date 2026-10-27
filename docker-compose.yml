@@ -1,0 +1,14 @@
+# Draft example only; no production hardening, payments, auth, or secrets.
+services:
+  portal:
+    build:
+      context: .
+      dockerfile: templates/deployment/docker/Dockerfile
+    environment:
+      HOST: 127.0.0.1
+      PORT: 8765
+    ports:
+      - "127.0.0.1:8765:8765"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
